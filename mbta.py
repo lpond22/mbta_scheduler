@@ -1,8 +1,18 @@
-import urllib
 import requests
 import json
 import time
 import datetime
+from time import sleep
+import unittest
+from shiftregister import ShiftRegister
+
+sleep_time = 0.25
+
+def get_register():
+  return ShiftRegister(10,9,11)
+
+def clear_register(register):
+  register.values = [0,0,0,0,0,0,0,0]
 
 url_base = 'https://api-v3.mbta.com'
 routeID = 'Orange'
@@ -38,13 +48,24 @@ arrival = arrival[:16]
 arrival = datetime.datetime.strptime(arrival, "%Y-%m-%dT%H:%M")
 arrival_time = arrival.strftime("%H:%M")
 
-def countdown(arrival_time, current_time):
+def countdown(arrival_time, now_time):
   estimated_time = arrival - now
-  if estimated_time.seconds/60 <= 10:
+  if estimated_time.seconds/60 <= 8:
     return estimated_time.seconds/60
   else: 
-    return 10
+    return 8
 
 print 'It is now:', now_time
 print 'The next inbound train at Stony Brook arrives at:', arrival_time
 print 'It will arrive in', countdown(arrival_time, now_time), 'minutes'
+
+def show_time():
+  register = get_register()
+  clear_register(register)
+  event = countdown(arrival_time, now_time)
+
+  for i in range(event):
+    register.shift(1)
+    register.show()
+
+show_time()
