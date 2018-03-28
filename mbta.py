@@ -64,8 +64,10 @@ def show_time():
   clear_register(register)
   event = countdown(arrival_time, now_time)
 
-  for i in range(event):
+  for i in range(event+1):
     register.shift(1)
     register.show()
 
-show_time()
+while True:
+  show_time()
+  time.sleep(60)
