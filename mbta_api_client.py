@@ -38,7 +38,8 @@ class MbtaApi3Client:
             rawResponse = requests.get(url)
             predictionsJson = rawResponse.json()
         except:
-            print("error!")
+            print("Error getting predictions from MBTA API!")
+        # import pdb; pdb.set_trace()
         return predictionsJson['data']
 
     def getArrivalTimePredictions(self, routeID, stopID, directionID = None):
